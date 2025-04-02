@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authorize Application</title>
+</head>
+<body>
+    <h1>Authorize {{ client.name }}?</h1>
+    <p>The application wants to access your account.</p>
+    
+    <form method="get">
+        <input type="hidden" name="authorize" value="1">
+        <input type="hidden" name="state" value="{{ state }}">
+        <input type="hidden" name="client_id" value="{{ client_id }}">
+        <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
+        <input type="hidden" name="response_type" value="{{ response_type }}">
+        <button type="submit">Authorize</button>
+    </form>
+    
+    <form method="get">
+        <input type="hidden" name="authorize" value="0">
+        <input type="hidden" name="state" value="{{ state }}">
+        <input type="hidden" name="client_id" value="{{ client_id }}">
+        <input type="hidden" name="redirect_uri" value="{{ redirect_uri }}">
+        <input type="hidden" name="response_type" value="{{ response_type }}">
+        <button type="submit">Deny</button>
+    </form>
+</body>
+</html>
