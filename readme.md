@@ -1,4 +1,4 @@
-# Django OAuth2 Provider - Flask Client Documentation
+## Django Custom OAuth2 Provider - Flask Client Documentation
 
 ## Overview
 This document explains how to integrate a Django OAuth2 provider with a Flask client.
