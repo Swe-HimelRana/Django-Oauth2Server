@@ -1,0 +1,75 @@
+# Django OAuth2 Provider - Flask Client Documentation
+# Save this as `flask_oauth_client.http`
+
+### Variables
+@baseUrl = http://localhost:8000/oauth
+@clientId = 23423423
+@clientSecret = Ov23lipRJArXBVcwaV9zOv23lipRJArXBVcwaV9z
+@apiKey = 232l4kj23l4j2l34j23l42l34242
+@redirectUri = http://localhost:5000/callback
+@flaskClient = http://localhost:5000
+
+### 1. Start Authorization Flow
+# Click this link in browser or use in your app:
+{{flaskClient}}/login
+
+### 2. Authorization Endpoint (Django)
+# This is what /login redirects to
+GET {{baseUrl}}/authorize/?client_id={{clientId}}&redirect_uri={{redirectUri}}&response_type=code&state=random_state_string
+Accept: application/json
+
+### 3. Token Exchange (Django)
+# This happens in the Flask /callback route
+POST {{baseUrl}}/token/
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&code={{authorization_code}}&client_id={{clientId}}&client_secret={{clientSecret}}&redirect_uri={{redirectUri}}
+
+### 4. Get User Info (Django)
+# Used in Flask /dashboard route
+GET {{baseUrl}}/userinfo/
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### 5. Get User Data (Django)
+# Used in Flask /dashboard route
+GET {{baseUrl}}/userdata/{{user_id}}/
+X-API-Key: {{apiKey}}
+Accept: application/json
+
+### 6. Logout (Django)
+# Called from Flask /logout route
+POST {{baseUrl}}/logout/
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+### 7. Flask Client Endpoints
+
+#### Home Page
+GET {{flaskClient}}/
+
+#### Login Initiation
+GET {{flaskClient}}/login
+
+#### OAuth Callback (handled automatically)
+GET {{flaskClient}}/callback?code={{authorization_code}}&state=random_state_string
+
+#### Dashboard (protected)
+GET {{flaskClient}}/dashboard
+Cookie: session={{session_cookie}}
+
+#### Logout
+GET {{flaskClient}}/logout
+
+### Example Usage Flow:
+# 1. Visit {{flaskClient}}/login in browser
+# 2. You'll be redirected to Django authorization
+# 3. After login, redirected back to {{flaskClient}}/callback
+# 4. Finally redirected to {{flaskClient}}/dashboard
+
+### Notes:
+# - Replace {{authorization_code}}, {{access_token}}, {{user_id}}, and 
+#   {{session_cookie}} with actual values when testing
+# - The Flask client runs on port 5000 by default
+# - Django OAuth provider runs on port 8000 by default
+# - CSRF protection is handled via the state parameter
